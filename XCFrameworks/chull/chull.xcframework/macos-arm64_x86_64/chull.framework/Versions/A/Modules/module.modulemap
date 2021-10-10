@@ -1,0 +1,6 @@
+framework module chull {
+  umbrella header "chull.h"
+
+  export *
+  module * { export * }
+}
