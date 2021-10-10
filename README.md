@@ -2,7 +2,7 @@
 
 ## Overview
 
-A framework for macOS and iOS platforms that generates 3D convex hulls.
+A Swift Package for macOS and iOS platforms that generates 3D convex hulls.
 The chull.c file has been customized and wrapped for ease of use in Swift.
 
 ### License
