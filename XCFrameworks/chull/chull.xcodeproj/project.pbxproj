@@ -14,6 +14,7 @@
 				D1167C4D27128CC400A4D4F2 /* ShellScript */,
 			);
 			dependencies = (
+				D1BEF2A02712AEB4000C6CDC /* PBXTargetDependency */,
 			);
 			name = Aggregate;
 			productName = Aggregate;
@@ -28,6 +29,16 @@
 		D1167C4727128BFF00A4D4F2 /* chull.m in Sources */ = {isa = PBXBuildFile; fileRef = D1167C4227128BFF00A4D4F2 /* chull.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		D1167C4827128BFF00A4D4F2 /* Modified.m in Sources */ = {isa = PBXBuildFile; fileRef = D1167C4327128BFF00A4D4F2 /* Modified.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D1BEF29F2712AEB4000C6CDC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D1167C2C27128BBC00A4D4F2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D1167C3427128BBC00A4D4F2;
+			remoteInfo = chull;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D1167C3527128BBC00A4D4F2 /* chull.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = chull.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +113,7 @@
 			buildPhases = (
 				D1167C3027128BBC00A4D4F2 /* Headers */,
 				D1167C3127128BBC00A4D4F2 /* Sources */,
+				D1BEF2A12712AEB8000C6CDC /* Auto Increment Build Number */,
 				D1167C3227128BBC00A4D4F2 /* Frameworks */,
 				D1167C3327128BBC00A4D4F2 /* Resources */,
 			);
@@ -178,6 +190,25 @@
 			shellPath = /bin/sh;
 			shellScript = "# 出力先ディレクトリ（プロジェクトの直下）\nOUTPUT_DIR=${PROJECT_DIR}/tmp\n\n# 中間ファイルの出力先ディレクトリ\nDERIVED_DIR=${OUTPUT_DIR}/${CONFIGURATION}-derived\n\n# archiveの出力先ディレクトリ\nARCHIVE_DIR=${OUTPUT_DIR}/${CONFIGURATION}-archive\n\n# xcframeworkの出力先ディレクトリ\n#XCFRAMEWORK_DIR=${OUTPUT_DIR}/${CONFIGURATION}-xcframework\nXCFRAMEWORK_DIR=${PROJECT_DIR}/\n\n# 出力先ディレクトリ削除\nrm -rf ${OUTPUT_DIR}\n\n# 出力先xcframeworkディレクトリ削除\nrm -rf $XCFRAMEWORK_DIR/${PROJECT_NAME}.xcframework\n\n# 中間ファイルの出力先ディレクトリ作成\nmkdir -p ${DERIVED_DIR}\n\n# アーカイブファイルの出力先ディレクトリ作成\nmkdir -p ${ARCHIVE_DIR}\n\n# xcframeworkの出力先ディレクトリ作成\nmkdir -p ${XCFRAMEWORK_DIR}\n\n# macOS用のarchiveファイル\nARCHIVE_FILE_MACOS=${ARCHIVE_DIR}/macos.xcarchive\necho \"ARCHIVE_FILE_MACOS:${ARCHIVE_FILE_MACOS}\"\n\n# iOS実機用のarchiveファイル\nARCHIVE_FILE_IOS=${ARCHIVE_DIR}/ios.xcarchive\necho \"ARCHIVE_FILE_IOS:${ARCHIVE_FILE_IOS}\"\n\n# iOSシミュレータ用のarchiveファイル\nARCHIVE_FILE_IOS_SIMULATOR=${ARCHIVE_DIR}/iossimulator.xcarchive\necho \"ARCHIVE_FILE_IOS_SIMULATOR:${ARCHIVE_FILE_IOS_SIMULATOR}\"\n\n# macOS用のarchiveファイル作成\nxcodebuild archive -scheme ${PROJECT_NAME} -destination=\"macOS\" -archivePath $ARCHIVE_FILE_MACOS -derivedDataPath $DERIVED_DIR -sdk macosx SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\n# iOS実機用のarchiveファイル作成\nxcodebuild archive -scheme ${PROJECT_NAME} -destination=\"iOS\" -archivePath $ARCHIVE_FILE_IOS -derivedDataPath $DERIVED_DIR -sdk iphoneos SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\n# iOSシミュレータ用のarchiveファイル作成\nxcodebuild archive -scheme ${PROJECT_NAME} -destination=\"iOS Simulator\" -archivePath $ARCHIVE_FILE_IOS_SIMULATOR -derivedDataPath $DERIVED_DIR -sdk iphonesimulator SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES\n\n# xcframework作成\nxcodebuild -create-xcframework -framework $ARCHIVE_FILE_MACOS/Products/Library/Frameworks/${PROJECT_NAME}.framework -framework $ARCHIVE_FILE_IOS/Products/Library/Frameworks/${PROJECT_NAME}.framework -framework $ARCHIVE_FILE_IOS_SIMULATOR/Products/Library/Frameworks/${PROJECT_NAME}.framework -output $XCFRAMEWORK_DIR/${PROJECT_NAME}.xcframework\n\n# xcframeworkの出力ディレクトリをFinderで開く\nopen ${XCFRAMEWORK_DIR}\n\n# 出力先ディレクトリ削除\nrm -rf ${OUTPUT_DIR}\n";
 		};
+		D1BEF2A12712AEB8000C6CDC /* Auto Increment Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Auto Increment Build Number";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "NEW_VERSION=$(git rev-list HEAD | wc -l | tr -d ' ' | xargs -n1 printf '%X')\nif [ $(git diff HEAD --stat | wc -l | tr -d ' ') -ne 0 ]; then\nNEW_VERSION=$(expr ${NEW_VERSION} + 1)\nfi\nagvtool new-version ${NEW_VERSION}\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -191,6 +222,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D1BEF2A02712AEB4000C6CDC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D1167C3427128BBC00A4D4F2 /* chull */;
+			targetProxy = D1BEF29F2712AEB4000C6CDC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D1167C3A27128BBC00A4D4F2 /* Debug */ = {
@@ -228,7 +267,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -293,7 +332,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DRIVERKIT_DEPLOYMENT_TARGET = 20.4;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -321,11 +360,11 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 4MY8L8N43N;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 7;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -349,11 +388,11 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 4MY8L8N43N;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 7;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
