@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "ConvexHull",
+    name: "chull",
     platforms: [
         .macOS(.v11), .iOS(.v14)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
-            name: "ConvexHull",
-            targets: ["ConvexHull","chull"]),
+            name: "chull",
+            targets: ["ConvexHull"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -26,7 +26,7 @@ let package = Package(
             dependencies: ["chull"]),
         .binaryTarget(
             name: "chull",
-            path: "./chull.xcframework"
+            path: "./Frameworks/chull.xcframework"
         ),
         .testTarget(
             name: "ConvexHullTests",
