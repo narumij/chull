@@ -11,7 +11,7 @@ To use like original chull.c, you need build up macOS command line project.
 You can use below code for this purpose.
 
 main.swift
-```
+```swift
 import Foundation
 import ConvexHull
 
