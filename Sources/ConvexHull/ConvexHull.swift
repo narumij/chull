@@ -67,5 +67,11 @@ extension ConvexHull {
         convexHull.faces.pointee.map{ ( primeVertex($0.vertex.0), primeVertex($0.vertex.1), primeVertex($0.vertex.1) ) }
     }
     
+    public static func main(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?) -> Int32 {
+        var convexHull = tsConvexHull(vertices: nil, edges: nil, faces: nil, debug: false, check: false)
+        let result = convexHull.main(argc: argc, argv: argv)
+        convexHull.free()
+        return result
+    }
 }
 
