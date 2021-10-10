@@ -26,7 +26,7 @@ let package = Package(
             dependencies: ["chull"]),
         .binaryTarget(
             name: "chull",
-            path: "./Frameworks/chull.xcframework"
+            path: "./Projects/chull/chull.xcframework"
         ),
         .testTarget(
             name: "ConvexHullTests",
