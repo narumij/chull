@@ -53,8 +53,8 @@ public class ConvexHull<PrimeVertex: VertexItem> {
 
 extension ConvexHull {
     
-    func primeVertex(_ vert: tVertex?) -> PrimeVertex {
-        PrimeVertex.from(opaque: vert?.pointee.opaque )!
+    func primeVertex(_ vert: tVertex?) -> PrimeVertex! {
+        PrimeVertex.from(opaque: vert?.pointee.opaque )
     }
 
     /// 枠線の取得
@@ -77,7 +77,9 @@ extension ConvexHull {
         var f: tFace? = convexHull.faces
         repeat {
             if let f = f {
-                result.append( ( primeVertex(f.pointee.vertex.0), primeVertex(f.pointee.vertex.1), primeVertex(f.pointee.vertex.2) ) )
+                result.append( ( primeVertices[.init(f.pointee.vertex.0!.pointee.vnum)],
+                                 primeVertices[.init(f.pointee.vertex.1!.pointee.vnum)],
+                                 primeVertices[.init(f.pointee.vertex.2!.pointee.vnum)] ) )
             }
             f = f?.pointee.next
         } while f != convexHull.faces
