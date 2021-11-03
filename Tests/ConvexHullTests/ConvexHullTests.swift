@@ -40,7 +40,9 @@ class ConvexHullTests: XCTestCase {
                                          debug: false )
         XCTAssertNoThrow( try chull.scan() )
         chull.print()
-        XCTAssertTrue(true)
+        XCTAssertEqual(chull.targetFace.count,12)
+        XCTAssertEqual(chull.targetEdges.count,18)
+
     }
     
     func testBase(num: Int, times: Int) throws {
