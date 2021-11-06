@@ -48,8 +48,6 @@ struct tVertexStructure {
     bool     onhull;        /* T iff point on hull. */
     bool        mark;        /* T iff point already processed. */
     tVertex  next, prev;
-    
-    const void *opaque;
 };
 
 struct tEdgeStructure {

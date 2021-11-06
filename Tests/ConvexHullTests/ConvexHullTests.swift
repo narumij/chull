@@ -40,8 +40,8 @@ class ConvexHullTests: XCTestCase {
                                          debug: false )
         XCTAssertNoThrow( try chull.scan() )
         chull.print()
-        XCTAssertEqual(chull.targetFace.count,12)
-        XCTAssertEqual(chull.targetEdges.count,18)
+        XCTAssertEqual(chull.resultFace.count,12)
+        XCTAssertEqual(chull.resultEdges.count,18)
 
     }
     

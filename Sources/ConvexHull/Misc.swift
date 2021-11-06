@@ -19,13 +19,13 @@ extension VertexItem {
 }
 
 /// chull.cで用いられているリンクリストのSwiftでの表現。
-public protocol tsLinkList: Equatable {
+public protocol tLinkList {
     var next: UnsafeMutablePointer<Self>! { get }
 }
 
-extension tsLinkList {
+extension tLinkList {
     /// リンクリストをoffsetの数進んだアイテムを返す。
-    func item(offset: Int) -> Self? {
+    private func item(offset: Int) -> Self? {
         offset == 0 ? self : self.next.pointee.item(offset: offset - 1)
     }
     /// リンクリストをpositionの数進んだアイテムへアクセスする。
@@ -34,51 +34,31 @@ extension tsLinkList {
     }
 }
 
-/// chull.cの構造体に対して共通で用いるイテレータ
-public struct tsIterator<T: tsLinkList> : IteratorProtocol {
-    public mutating func next() -> T? {
-        defer { current = current?.next?.pointee  }
-        return current == begin ? nil : current
-    }
-    public typealias Element = T
-    var current: T?
-    let begin: T?
-}
+extension tsVertex: tLinkList { }
+extension tsFace:   tLinkList { }
+extension tsEdge:   tLinkList { }
 
-extension tsVertex: Sequence, tsLinkList {
-    public static func == (lhs: tVertexStructure, rhs: tVertexStructure) -> Bool {
-        [
-            (lhs.next,  rhs.next),
-            (lhs.prev,  rhs.prev),
-        ]
-            .allSatisfy(==)
-    }
-}
+public struct tSequence<Pointee: tLinkList>: Sequence {
+    
+    public typealias Element = UnsafeMutablePointer<Pointee>
 
-extension tsEdge: Sequence, tsLinkList {
-    public static func == (lhs: tsEdge, rhs: tsEdge) -> Bool {
-        [
-            (lhs.next,  rhs.next),
-            (lhs.prev,  rhs.prev),
-        ]
-            .allSatisfy(==)
+    public func makeIterator() -> Iterator {
+        Iterator(start: linkList)
     }
-}
-
-extension tsFace: Sequence, tsLinkList {
-    public static func == (lhs: tsFace, rhs: tsFace) -> Bool {
-        [
-            (lhs.next,  rhs.next),
-            (lhs.prev,  rhs.prev),
-        ]
-            .allSatisfy(==)
+    
+    let linkList: Element
+    
+    public struct Iterator: IteratorProtocol {
+        
+        public mutating func next() -> Element? {
+            defer { current = current?.pointee.next ?? start.pointee.next }
+            return current.map{ $0 != start ? $0 : nil } ?? start
+        }
+        
+        let start:   Element
+        var current: Element?
+        init(start s: Element) {
+            start = s
+        }
     }
-}
-
-extension Sequence where Self: tsLinkList {
-    public __consuming func makeIterator() -> tsIterator<Self> {
-        tsIterator<Self>(current: self, begin: self)
-    }
-    public typealias Element = Self
-    public typealias Iterator = tsIterator<Self>
 }

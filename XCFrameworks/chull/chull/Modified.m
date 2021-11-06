@@ -16,7 +16,6 @@ void AppendVertex(tConvexHull chull, int x, int y, int z, int vnum, const void *
     v->v[Y] = y;
     v->v[Z] = z;
     v->vnum = vnum;
-    v->opaque = opaque;
     if ( ( abs(x) > SAFE ) || ( abs(y) > SAFE ) || ( abs(z) > SAFE ) ) {
         printf("Coordinate of vertex below might be too large: run with -d flag\n");
         PrintPoint(chull, v);
