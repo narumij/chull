@@ -53,21 +53,16 @@ public class ConvexHull<PrimeVertex: VertexItem> {
 
 extension ConvexHull {
     
-    /// 枠線の取得
-    public var resultEdges:[(PrimeVertex, PrimeVertex)] {
+    var resultEdgeIndices:[(Int,Int)] {
         
         tSequence(linkList: convexHull.edges)
             .map { e -> (Int,Int) in
                 ((.init(e.pointee.endpts.0!.pointee.vnum)),
                  (.init(e.pointee.endpts.1!.pointee.vnum)))
             }
-            .map { e -> (PrimeVertex,PrimeVertex) in
-                ( primeVertices[e.0], primeVertices[e.1] )
-            }
     }
     
-    /// 三角形の取得
-    public var resultFace:[(PrimeVertex, PrimeVertex, PrimeVertex)] {
+    var resultFaceIndeces:[(Int,Int,Int)] {
         
         tSequence(linkList: convexHull.faces)
             .map { f -> (Int,Int,Int) in
@@ -75,7 +70,39 @@ extension ConvexHull {
                  (.init(f.pointee.vertex.1!.pointee.vnum)),
                  (.init(f.pointee.vertex.2!.pointee.vnum)))
             }
-            .map { f -> (PrimeVertex,PrimeVertex,PrimeVertex) in
+    }
+    
+    var resultFaceEdgeIndeces:[[(Int,Int)]] {
+        
+        tSequence(linkList: convexHull.faces)
+            .map { f -> [(Int,Int)] in
+                [
+                    ( .init(f.pointee.edge.0!.pointee.endpts.0!.pointee.vnum),
+                      .init(f.pointee.edge.0!.pointee.endpts.1!.pointee.vnum) ),
+                    
+                    ( .init(f.pointee.edge.1!.pointee.endpts.0!.pointee.vnum),
+                      .init(f.pointee.edge.1!.pointee.endpts.1!.pointee.vnum) ),
+                    
+                    ( .init(f.pointee.edge.2!.pointee.endpts.0!.pointee.vnum),
+                      .init(f.pointee.edge.2!.pointee.endpts.1!.pointee.vnum) )
+                ]
+            }
+    }
+    
+    /// 枠線の取得
+    public var resultEdges:[(PrimeVertex, PrimeVertex)] {
+        
+        resultEdgeIndices
+            .map { e -> (PrimeVertex, PrimeVertex) in
+                ( primeVertices[e.0], primeVertices[e.1] )
+            }
+    }
+    
+    /// 三角形の取得
+    public var resultFace:[(PrimeVertex, PrimeVertex, PrimeVertex)] {
+        
+        resultFaceIndeces
+            .map { f -> (PrimeVertex, PrimeVertex, PrimeVertex) in
                 ( primeVertices[f.0], primeVertices[f.1], primeVertices[f.2] )
             }
     }
