@@ -29,7 +29,8 @@ class ConvexHullTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-    func test00() throws {
+    @MainActor
+    func test00() async throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
@@ -66,6 +67,21 @@ class ConvexHullTests: XCTestCase {
                  ) )
     }
     
+    @MainActor
+    func test01() throws {
+        
+        let fcube: [SIMD3<Float>] = [[0,0,0],[1,0,0],[0,1,0],[0,0,1]]
+        
+        let chull = ConvexHull<SIMD3<Float>>( fcube,
+                                              check: false,
+                                              debug: false )
+        XCTAssertNoThrow( try chull.scan() )
+
+        XCTAssertEqual(chull.resultFace.count,4)
+        XCTAssertEqual(chull.resultEdges.count,6)
+    }
+    
+    @MainActor
     func testPerformanceBase(num: Int, times: Int) throws {
         let v: [SIMD3<Float>] = .init((0..<num).map{ _ in .init(rnd(), rnd(), rnd() ) } )
         measure {
@@ -76,12 +92,19 @@ class ConvexHullTests: XCTestCase {
         }
     }
     
+    @MainActor
     func test02() throws { try testPerformanceBase(num: 4, times: 10000) }
+    @MainActor
     func test03() throws { try testPerformanceBase(num: 5, times: 10000) }
+    @MainActor
     func test04() throws { try testPerformanceBase(num: 6, times: 10000) }
+    @MainActor
     func test05() throws { try testPerformanceBase(num: 10, times: 5000) }
+    @MainActor
     func test06() throws { try testPerformanceBase(num: 100, times: 500) }
+    @MainActor
     func test07() throws { try testPerformanceBase(num: 1000, times: 25) }
+    @MainActor
     func test08() throws { try testPerformanceBase(num: 10000, times: 1) }
 }
 

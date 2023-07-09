@@ -9,13 +9,14 @@ public protocol VertexItem {
 }
 
 /// 凸包を生成するクラス
+//@MainActor
 public class ConvexHull<PrimeVertex: VertexItem> {
     
     var convexHull: tsConvexHull
     
     let primeVertices: [PrimeVertex]
     
-    public init(_ sources: [PrimeVertex], check c: Bool = false, debug d: Bool = false) {
+    public nonisolated init(_ sources: [PrimeVertex], check c: Bool = false, debug d: Bool = false) {
         
         convexHull = tsConvexHull(vertices: nil, edges: nil, faces: nil, debug: d, check: c)
         
@@ -107,10 +108,12 @@ extension ConvexHull {
             }
     }
     
+#if false
     public static func main(argc: Int32, argv: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?) -> Int32 {
         var convexHull = tsConvexHull(vertices: nil, edges: nil, faces: nil, debug: false, check: false)
         let result = convexHull.main(argc: argc, argv: argv)
         convexHull.free()
         return result
     }
+#endif
 }

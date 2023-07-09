@@ -1051,5 +1051,4 @@ void    EdgeOrderOnFaces ( tConvexHull chull ) {
         }
         f = f->next;
     } while (f != faces);
-    
 }
