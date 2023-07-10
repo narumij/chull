@@ -93,7 +93,7 @@ tVertex MakeNullVertex( tConvexHull ) CF_REFINED_FOR_SWIFT;
 void    ReadVertices( tConvexHull ) CF_REFINED_FOR_SWIFT;
 void    Print( tConvexHull ) CF_SWIFT_NAME(tsConvexHull.print(self:)) CF_REFINED_FOR_SWIFT;
 void    SubVec( int a[3], int b[3], int c[3]) CF_REFINED_FOR_SWIFT;
-void    DoubleTriangle( tConvexHull ) CF_SWIFT_NAME(tsConvexHull.doubleTriangle(self:)) CF_REFINED_FOR_SWIFT;
+int     DoubleTriangle( tConvexHull ) CF_SWIFT_NAME(tsConvexHull.doubleTriangle(self:)) CF_REFINED_FOR_SWIFT;
 void    ConstructHull( tConvexHull ) CF_SWIFT_NAME(tsConvexHull.constructHull(self:)) CF_REFINED_FOR_SWIFT;
 bool    AddOne( tConvexHull, tVertex p ) CF_REFINED_FOR_SWIFT;
 int     VolumeSign( tConvexHull, tFace f, tVertex p) CF_REFINED_FOR_SWIFT;

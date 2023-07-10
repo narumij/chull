@@ -256,7 +256,7 @@ void    SubVec( int a[3], int b[3], int c[3])
  3 newfaces to the fourth point are constructed and the data structures
  are cleaned up.
  ---------------------------------------------------------------------*/
-void    DoubleTriangle( tConvexHull chull )
+int    DoubleTriangle( tConvexHull chull )
 {
     tVertex  v0, v1, v2, v3, t;
     tFace    f0, f1 = NULL;
@@ -266,8 +266,10 @@ void    DoubleTriangle( tConvexHull chull )
     /* Find 3 noncollinear points. */
     v0 = vertices;
     while ( Collinear( v0, v0->next, v0->next->next ) )
-        if ( ( v0 = v0->next ) == vertices )
-            printf("DoubleTriangle:  All points are Collinear!\n"), exit(0);
+        if ( ( v0 = v0->next ) == vertices ) {
+            printf("DoubleTriangle:  All points are Collinear!\n");//, exit(0);
+            return -1;
+        }
     v1 = v0->next;
     v2 = v1->next;
     
@@ -292,8 +294,10 @@ void    DoubleTriangle( tConvexHull chull )
     v3 = v2->next;
     vol = VolumeSign( chull, f0, v3 );
     while ( !vol )   {
-        if ( ( v3 = v3->next ) == v0 )
-            printf("DoubleTriangle:  All points are coplanar!\n"), exit(0);
+        if ( ( v3 = v3->next ) == v0 ) {
+            printf("DoubleTriangle:  All points are coplanar!\n");//, exit(0);
+            return -1;
+        }
         vol = VolumeSign( chull, f0, v3 );
     }
     
@@ -304,7 +308,7 @@ void    DoubleTriangle( tConvexHull chull )
         PrintOut( chull, vertices );
     }
     
-    
+    return 0;
 }
 
 

@@ -9,14 +9,13 @@ public protocol VertexItem {
 }
 
 /// 凸包を生成するクラス
-//@MainActor
 public class ConvexHull<PrimeVertex: VertexItem> {
     
     var convexHull: tsConvexHull
     
     let primeVertices: [PrimeVertex]
     
-    public nonisolated init(_ sources: [PrimeVertex], check c: Bool = false, debug d: Bool = false) {
+    public init(_ sources: [PrimeVertex], check c: Bool = false, debug d: Bool = false) {
         
         convexHull = tsConvexHull(vertices: nil, edges: nil, faces: nil, debug: d, check: c)
         
@@ -38,9 +37,15 @@ public class ConvexHull<PrimeVertex: VertexItem> {
         convexHull.free()
     }
     
+    enum Error: Swift.Error {
+        case coplanar
+    }
+    
     /// 保持している頂点を走査し、凸包を生成する。
     public func scan() throws {
-        convexHull.doubleTriangle()
+        guard convexHull.doubleTriangle() == 0 else {
+            throw Error.coplanar
+        }
         convexHull.constructHull()
         convexHull.edgeOrderOnFaces()
     }
